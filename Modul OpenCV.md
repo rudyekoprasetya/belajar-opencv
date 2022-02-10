@@ -18,7 +18,7 @@ Modul ini menggunakan lisensi [Creative Common](https://creativecommons.org/lice
 - [Pengantar](#pengantar)
 - [Chapter 1 - Konsep Gambar Digital](#konsep-gambar-digital)
 - [Chapter 2 - Persiapan dan Installasi](#persiapan-dan-installasi)
-- [Chapter 3 - Membaca Gambar dan Video](#membaca-gambar-dan-video)
+- [Chapter 3 - Membaca Gambar, Video dan Camera](#membaca-gambar-dan-video)
 - Chapter 4
 - Chapter 5
 - Chapter 6
@@ -117,14 +117,12 @@ $ python --version
 
 jika muncul versi python maka installasi sudah berhasil.
 
-Selanjutnya kita akan lakukan install library openCV. Untuk OS Windows silahkan download kemudian instal
-l openCV [https://sourceforge.net/projects/opencvlibrary/files/4.5.5/opencv-4.5.5-vc14_vc15.exe/download](https://sourceforge.net/projects/opencvlibrary/files/4.5.5/opencv-4.5.5-vc14_vc15.exe/download).
-
-Untuk OS Linux seperti ubuntu dkk silahkan jalankan perintah berikut pada terminal
+Selanjutnya kita akan lakukan install library openCV. Jalankan ini pada terminal
 
 ```console
-$ sudo apt install libopencv-dev python3-opencv
+pip install opencv-python
 ```
+
 Tunggu sampai proses installasi selesai
 
 Jika proses sudah selesai untuk ujicoba silahkan jalankan perintah dibawah ini untuk cek versi openCV yang terinstall pada terminal
@@ -133,7 +131,7 @@ Jika proses sudah selesai untuk ujicoba silahkan jalankan perintah dibawah ini u
 $ python3 -c "import cv2; print(cv2.__version__)"
 ```
 
-bila di windows
+bila di OS windows
 
 ```console
 py -c "import cv2; print(cv2.__version__)"
@@ -145,11 +143,149 @@ Jika muncul versi yang diinstall semisal versi 4.5.5 maka kita sudah berhasil me
 ## Membaca Gambar dan Video
 ---
 
+Setelah kita melakukan persiapan dan installasi semua kebutuhan, selanjutnya kita akan memulai praktikum untuk mengetahui bagaimana openCV membaca suatu gambar dan video baik itu file video atau dari camera/webcam.
+
+Pertama kita buat folder kerja untuk menampung semua file project, misalkan di **Documents/BelajarOpenCV**, Kemudian silahkan buat folder **Chapter1** didalam folder kerja anda. Selanjutnya didalamnya kita buat folder **resources** untuk menampung file gambar atau video kita. Berikut struktur foldernya
+
+```console
+BelajarOpenCV
+|-chapter1
+    |-resources
+        |-file_image.jpg
+        |-file_video.mp4 
+```
+
+Anda bisa memasukan file gambar sesuai keinginan. Untuk format bisa JPG, PNG tau BMP. Sedangkan untuk file video usahakan formatnya MP4 dan durasinya jangan terlalu lama, semisal 5 detik itu sudah cukup.
+
+Untuk belajar membaca file image. Pertama silahkan download file lenna.png di [sini](https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png). Kemudian Masukan kedalam folder **resources**.
+
+Kemudian buatlah file **read_img.py** didalam folder **chapter1** dengan code sebagai berikut 
+
+```python
+#import library openCV
+import cv2
+
+#load gambar
+img = cv2.imread("resources/lenna.png")
+
+# menampilkan gambar
+cv2.imshow("Hasil",img)
+
+# tunggu 
+cv2.waitKey(0)
+```
+
+Kemudian buka terminal atau console, masuk kedalam folder chapter1 dan jalankan file read_img.py dengan perintah 
+
+```console
+py read_img.py
+```
+
+Amatilah jendela apa yang muncul. 
+
+Code `imread("resources/lenna.png")` digunakan untuk membaca file gambar dari path atau komputer kita. Pastikan path atau jalur ke file tersebut tepat beserta nama filenya, contohnya adalah file gambar lenna.png ada didalam folder resources. Sedangkan code `imshow("Hasil",img)` digunakan untuk menampilkan hasil dalam suatu jendela dengan nama Windows *Hasil*. Untuk code `cv2.waitKey(0)` digunakan untuk menghentikan eksekusi sementara. `cv2.waitKey` menerima satu argumen integer yang berperan sebagai delay (dalam milisenconds) menampilkan frame hingga frame tersebut akan secara otomatis di-close. 
+
+Selanjutnya kita coba untuk menampilkan file video. Buatlah file **read_vid.py** didalam folder **chapter1**
+
+```python
+#import library openCV
+import cv2
+
+#load file video
+cap = cv2.VideoCapture("resources/video.mp4")
+
+#baca hasil video
+while True:
+    success, video=cap.read()
+
+    # menampilkan video ke jendela
+    cv2.imshow("Video",video)
+    
+    # hentikan jika ditekan tombol Q di keyboard 
+    if cv2.waitKey(1) == ord("q"):
+        break 
+```
+
+Jangan lupa masukan file video didalam folder resources. Coba jalankan file tersebut
+
+```console
+py read_video.py
+```
+Amatilah jendela yang muncul. Untuk menutup jendela video cukup dengan menekan **tombol Q** di keyboard. Ini sesuai dengan code ` if cv2.waitKey(1) == ord("q"):`
+
+Kita juga bisa mengambil gambar dari web cam atau camera yang ada didalam komputer/laptop kita. Untuk ujicoba silahkan buat file baru **read_cam.py** di folder **chapter1**
+
+```python
+#import library openCV
+import cv2
+
+#load camera utama perangkat
+cap = cv2.VideoCapture(0)
+
+#merubah resolusi camera 640 x 480
+cap.set(3,640)
+cap.set(4,480)
 
 
+#baca hasil
+while True:
+    ret, frame=cap.read()
 
+    # menampilkan hasil ke jendela
+    cv2.imshow("Camera",frame)
 
+    # hentikan jika ditekan tombol Q di keyboard 
+    if cv2.waitKey(1) == ord("q"):
+        break
 
+#hapus semua cache
+cap.release()
+cv2.destroyAllWindows()
+```
+
+Jalankan file diatas dengan perintah
+
+```console
+py read_cam.py
+```
+
+Amatilah hasilnya. 
+
+Code `cap.set(3,640)` dan `cap.set(4,480)` digunakan untuk merubah resolusi camera yang ditampilkan. kemudian hasilnya ditampilkan dengan code `cv.imshow("camera",frame)`.  Untuk menghapus cache file menggunakan code `cap.release()` dan `cv2.destroyAllWindows()`. Untuk menutup jendela tekan tombol Q.
+
+Untuk mengambil gambar dari camera kita buat file **take_pic.py**
+
+```python
+#import library openCV
+import cv2
+
+#load camera utama perangkat
+cap = cv2.VideoCapture(0)
+
+#merubah resolusi camera 640 x 480
+cap.set(3,640)
+cap.set(4,480)
+
+#baca hasil
+while True:
+    ret, frame=cap.read()
+
+    # menampilkan hasil ke jendela
+    cv2.imshow("Camera",frame)
+
+    # ambil gambar saat ditekan tombol Y di keyboard 
+    if cv2.waitKey(1) == ord("y"):
+        #simpan frame yang aktif di folder resources dengan nama pic1.png
+        cv2.imwrite('resources/pic1.png',frame)
+        break
+    
+#hapus semua cache
+cap.release()
+cv2.destroyAllWindows()
+```
+Coba jalankan code diatas dan amatilah.
+
+pada code `cv2.imwrite('resources/pic1.png',frame)` berfungsi untuk menyimpan frame yang aktif dari camera dan disimpan dalam folder **resources** dengan nama file **pic1.png**.  Itu semua akan dijalankan saat ditekan tombol Y.
 
 
 
@@ -163,4 +299,5 @@ Jika muncul versi yang diinstall semisal versi 4.5.5 maka kita sudah berhasil me
  - [https://id.wikipedia.org/wiki/OpenCV](https://id.wikipedia.org/wiki/OpenCV)
  - [https://rudyekoprasetya.wordpress.com/2021/08/14/kenapa-aku-belajar-python/](https://rudyekoprasetya.wordpress.com/2021/08/14/kenapa-aku-belajar-python/)
  - [https://linuxize.com/post/how-to-install-opencv-on-ubuntu-20-04/](https://linuxize.com/post/how-to-install-opencv-on-ubuntu-20-04/)
+ - [https://iglab.tech/opencv-part-1-meng-load-dan-menampilkan-image/](https://iglab.tech/opencv-part-1-meng-load-dan-menampilkan-image/)
 
