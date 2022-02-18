@@ -19,8 +19,8 @@ Modul ini menggunakan lisensi [Creative Common](https://creativecommons.org/lice
 - [Chapter 1 - Konsep Gambar Digital](#konsep-gambar-digital)
 - [Chapter 2 - Persiapan dan Installasi](#persiapan-dan-installasi)
 - [Chapter 3 - Membaca Gambar, Video dan Camera](#membaca-gambar-dan-video)
-- Chapter 4
-- Chapter 5
+- [Chapter 4 - Mengelola Citra Digital Bag 1](#mengelola-citra-digital)
+- [Chapter 5 - Mengelola Citra Digital Bag 2](#mengelola-warna-citra)
 - Chapter 6
 - Chapter 7
 - Chapter 8
@@ -58,7 +58,7 @@ Pada dasarnya, beberapa tugas yang dapat diselesaikan menggunakan Computer Visio
 
 Pada dasarnya komputer melihat segala sesuatu atau data dalam bentuk numerikal. Baik itu text maupun gambar atau image. Image dalam komputer secara numerik disebut sebagai pixel.
 
-Menurut Wikipedia
+Menurut [Wikipedia](https://id.wikipedia.org/wiki/Piksel) 
 
  > **Pixels** adalah unsur gambar atau representasi sebuah titik terkecil dalam sebuah gambar grafis yang dihitung per inci. Pixel sendiri berasal dari akronim bahasa Inggris *Picture Element* yang disingkat menjadi Pixel.
 
@@ -171,6 +171,9 @@ img = cv2.imread("resources/lenna.png")
 # menampilkan gambar
 cv2.imshow("Hasil",img)
 
+#melihat banyak pixel dan channel gambar
+print(img.shape)
+
 # tunggu 
 cv2.waitKey(0)
 ```
@@ -184,6 +187,8 @@ py read_img.py
 Amatilah jendela apa yang muncul. 
 
 Code `imread("resources/lenna.png")` digunakan untuk membaca file gambar dari path atau komputer kita. Pastikan path atau jalur ke file tersebut tepat beserta nama filenya, contohnya adalah file gambar lenna.png ada didalam folder resources. Sedangkan code `imshow("Hasil",img)` digunakan untuk menampilkan hasil dalam suatu jendela dengan nama Windows *Hasil*. Untuk code `cv2.waitKey(0)` digunakan untuk menghentikan eksekusi sementara. `cv2.waitKey` menerima satu argumen integer yang berperan sebagai delay (dalam milisenconds) menampilkan frame hingga frame tersebut akan secara otomatis di-close. 
+
+Selain itu di console atau terminal akan munculkan nilai `(512,512,3)` dalam hal ini berarti image tersebut memiliki dimensi 512 x 512 pixel dengan 3 channel.
 
 Selanjutnya kita coba untuk menampilkan file video. Buatlah file **read_vid.py** didalam folder **chapter1**
 
@@ -283,9 +288,298 @@ while True:
 cap.release()
 cv2.destroyAllWindows()
 ```
+
 Coba jalankan code diatas dan amatilah.
 
 pada code `cv2.imwrite('resources/pic1.png',frame)` berfungsi untuk menyimpan frame yang aktif dari camera dan disimpan dalam folder **resources** dengan nama file **pic1.png**.  Itu semua akan dijalankan saat ditekan tombol Y.
+
+
+## Mengelola Citra Digital
+---
+
+Setelah kita bisa memuat gambar dan video, baik dalam bentuk file maupun dari camera. Sekarang kita akan belajar bagaimana mengelolanya dengan openCV.
+
+Silahkan buat folder **chapter2** pada folder kerja kita. Kemudian kita copykan folder resources yang ada pada chapter1 kedalam folder chapter2, sehingga strukturnya seperti dibawah ini
+
+```console
+BelajarOpenCV
+|-chapter1
+|-chapter2
+    |-resources
+        |-lenna.png
+        |-video.mp4 
+```
+
+Pertama kita akan praktikum memanipulasi gambar, sebelum itu kita install paket **imutils**. Sedangkan imutils adalah library untuk pemrosesan gambar dasar seperti translasi, rotasi, pengubahan ukuran.
+
+Untuk install jalankan perintah
+
+```console
+pip install imutils
+```
+selanjutnya buatlah file baru dengan nama **img_translate.py** dengan coding dibawah ini
+
+```python
+import cv2
+import imutils 
+
+img = cv2.imread('resources/lenna.png')
+cv2.imshow('gambar asli',img)
+
+#tranlasi
+x, y = 150, 50 #geser sumbu X sebesar 150 sumbu Y sebesar 50
+img_trans = imutils.translate(img, x, y)
+cv2.imshow('gambar translasi', img_trans)
+cv2.waitKey(0)
+```
+
+coba jalankan file tersebut, dan amatilah yang terjadi.
+
+Pada dasarnya translasi digunakan untuk mengeser gambar ke suatu koordinat tertentu, hal ini bisa dilihat pada code `imutils.translate(img, x, y)` nilai X positif akan menggeser image ke kanan sedangkan nilai y positif akan menggeser image ke bawah. Dalam hal ini berlaku untuk kebalikannya.
+
+Coba ubahlah kode diatas menjadi dibawah ini
+
+```python
+import cv2
+import imutils 
+
+img = cv2.imread('resources/lenna.png')
+cv2.imshow('gambar asli',img)
+
+#tranlasi
+x, y = -150, 50 #geser sumbu X sebesar 150 sumbu Y sebesar 50
+img_trans = imutils.translate(img, x, y)
+cv2.imshow('gambar translasi', img_trans)
+cv2.waitKey(0)
+```
+Jalankan dan amatilah hasilnya.
+
+Kita akan belajar memutar citra. Silahkan buat file baru **img_rotate.py**
+
+```python
+import cv2
+import imutils 
+
+img = cv2.imread('resources/lenna.png')
+cv2.imshow('gambar asli',img)
+
+#rotasi kekiri 90 derajat
+angle = 90
+
+img_rotate = imutils.rotate(img, angle)
+cv2.imshow('gambar rotasi', img_rotate)
+cv2.waitKey(0)
+```
+
+Jalankan file tersebut dan amatilah perbedaanya.
+
+fungsi `imutils.rotate(img, angle)` digunakan untuk memutar citra dengan sudut derajat tertentu. untuk nilai positif objek akan diputar berlawanan arah jarum jam. Untuk negatif objek akan diputar searah jarum jam.  
+
+operasi ini bisa pula digunakan untuk camera, coba buatlah file **cam_rotate.py** dengan code berikut
+
+```python
+import cv2
+import imutils
+
+#load camera resolusi 640 x 480
+cam = cv2.VideoCapture(0)
+cam.set(3,640)
+cam.set(4,480)
+
+while True:
+    ret, frame=cam.read()
+
+    #tampilkan camera normal
+    cv2.imshow("Camera Asli",frame)
+    
+    #tampilkan camera rotasi 90 derajat
+    angle = 90
+    frame_rotate = imutils.rotate(frame,angle)
+    cv2.imshow("Camera rotasi",frame_rotate)
+
+    if cv2.waitKey(1) == ord("q"):
+        break
+
+cam.release()
+cv2.destroyAllWindows()
+```
+
+Jalankan dan cermatilah hasilnya. Untuk keluar tekan tombol Q
+
+Selanjutnya kita akan belajar untuk merubah ukuran atau resize citra. silahkan buat file **img_resize.py**
+
+```python
+import cv2
+import imutils 
+
+img = cv2.imread('resources/lenna.png')
+cv2.imshow('gambar asli',img)
+
+#resize ukuran panjang 150 lebar 150
+w, h = 150, 150
+
+img_resize = cv2.resize(img, (w,h), interpolation=cv2.INTER_AREA)
+cv2.imshow('gambar resize', img_resize)
+
+cv2.waitKey(0)
+```
+
+Coba jalankan dan bandingkan hasilnya dengan gambar asli.
+
+kita bisa jua menggunakan imutils agar aspect ratio saat resize sesuai. Coba ubahlah coding diatas menjadi dibawah ini
+
+```python
+import cv2
+import imutils 
+
+img = cv2.imread('resources/lenna.png')
+cv2.imshow('gambar asli',img)
+
+#resize ukuran panjang 150 lebar 150
+w, h = 150, 150
+
+img_resize = imutils.resize(img, width=w)
+cv2.imshow('gambar resize', img_resize)
+
+cv2.waitKey(0)
+```
+Kita cukup mendefinisikan salah satu ukuran saja baik width atau height saja.
+
+Selanjutnya kita akan mencoba untuk flip atau membalik citra. Silahkan buat file **img_flip.py**
+
+```python
+import cv2
+import imutils 
+
+img = cv2.imread('resources/lenna.png')
+cv2.imshow('gambar asli',img)
+
+#flip horisontal
+flip_hor = cv2.flip(img, 1)
+#flip vertikal
+flip_ver = cv2.flip(img, 0)
+#flip vertikal dan horisontal
+flip_verhor = cv2.flip(img, -1)
+cv2.imshow('Flip horisontal', flip_hor)
+cv2.imshow('Flip vertikal', flip_ver)
+cv2.imshow('Flip vertikal dan horisontal', flip_verhor)
+
+cv2.waitKey(0)
+```
+
+Coba jalankan dan bandingkan hasilnya dengan gambar aslinya.
+
+kita coba pula lakukan operasi ini pada camera, semisal kita mau lakukan file vertikal atau buat mirro camera kita. Buatlah file **cam_flip.py**
+
+```python
+import cv2
+import imutils
+
+#load camera resolusi 640 x 480
+cam = cv2.VideoCapture(0)
+cam.set(3,640)
+cam.set(4,480)
+
+while True:
+    ret, frame=cam.read()
+
+    #tampilkan camera normal
+    cv2.imshow("Camera Asli",frame)
+
+    #buat mirror
+    frame_mirror = cv2.flip(frame, 1)
+    cv2.imshow("Camera mirror",frame_mirror)
+
+    if cv2.waitKey(1) == ord("q"):
+        break
+
+cam.release()
+cv2.destroyAllWindows()
+```
+Coba jalankan dan perhatikan hasilnya. tekan tombol Q untuk menutup jendela kamera.
+
+Kemudian buatlah file **img_crop.py** untuk belajar cropping image
+
+```python
+import cv2
+import imutils 
+
+img = cv2.imread('resources/lenna.png')
+cv2.imshow('gambar asli',img)
+
+#cropping image dari pixel 48 s/d 255 dan pixel 90 s/d 240
+img_crop = img[48:255, 90:240]
+
+cv2.imshow('gambar crop',img_crop)
+
+cv2.waitKey(0)
+```
+Coba jalankan dan bandingkan hasilnya dengan gambar aslinya.
+
+Terakhir kita akan coba menggabungkan beberapa citra menjadi satu. disini kita akan menggunakan *library numpy*. 
+
+**NumPy** adalah sebuah library pada Python yang berfungsi untuk melakukan operasi vektor dan matriks dengan mengolah array dan array multidimensi. Biasanya NumPy digunakan untuk kebutuhan dalam menganalisis data. Kita tahu bahwa citra adalah kumpulan array sehingga numpy bisa membantu untuk mengelolanya.
+
+silahkan buat file **img_gabung.py** dengan code berikut
+
+```python
+import cv2
+import numpy as np
+
+img = cv2.imread('resources/lenna.png')
+
+#flip image
+flip_hor = cv2.flip(img, 1)
+flip_ver = cv2.flip(img, 0)
+
+#gabungkan gambar horizontal
+gabung_hor = np.hstack((img,flip_hor,flip_ver))
+
+#gabungkan gambar vertital
+gabung_ver = np.vstack((img,flip_hor,flip_ver))
+
+cv2.imshow('gabung horizontal',gabung_hor)
+cv2.imshow('gabung vertikal',gabung_ver)
+
+cv2.waitKey(0)
+```
+
+Coba jalankan code diatas dan amati hasilnya.
+
+Kita coba pula dengan camera. Buatlah file **cam_gabung.py**
+
+```python
+import cv2
+import numpy as np
+
+#load camera resolusi 640 x 480
+cam = cv2.VideoCapture(0)
+cam.set(3,640)
+cam.set(4,480)
+
+while True:
+    ret, frame=cam.read()
+
+    #buat mirror
+    frame_mirror = cv2.flip(frame, 1)
+
+    #gabung camera
+    gabung = np.hstack((frame,frame_mirror))
+    # cv2.imshow("Camera mirror",frame_mirror)
+    cv2.imshow("Camera gabung",gabung)
+
+    if cv2.waitKey(1) == ord("q"):
+        break
+
+cam.release()
+cv2.destroyAllWindows()
+```
+
+Coba jalankan code diatas dan amati hasilnya.
+
+## Mengelola Warna Citra
+---
+
 
 
 
@@ -300,4 +594,5 @@ pada code `cv2.imwrite('resources/pic1.png',frame)` berfungsi untuk menyimpan fr
  - [https://rudyekoprasetya.wordpress.com/2021/08/14/kenapa-aku-belajar-python/](https://rudyekoprasetya.wordpress.com/2021/08/14/kenapa-aku-belajar-python/)
  - [https://linuxize.com/post/how-to-install-opencv-on-ubuntu-20-04/](https://linuxize.com/post/how-to-install-opencv-on-ubuntu-20-04/)
  - [https://iglab.tech/opencv-part-1-meng-load-dan-menampilkan-image/](https://iglab.tech/opencv-part-1-meng-load-dan-menampilkan-image/)
+ - [https://stackoverflow.com/questions/4179220/capture-single-picture-with-opencv](https://stackoverflow.com/questions/4179220/capture-single-picture-with-opencv)
 
