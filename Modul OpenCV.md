@@ -125,6 +125,28 @@ pip install opencv-python
 
 Tunggu sampai proses installasi selesai
 
+Jika mengalami kegagalan installasi, atau error dibawah ini
+
+```console
+Step 12/24 : RUN pip install opencv-python opencv-contrib-python
+ ---> Running in a0f746a23aed
+Collecting opencv-python
+  Downloading https://files.pythonhosted.org/packages/77/f5/49f034f8d109efcf9b7e98fbc051878b83b2f02a1c73f92bbd37f317288e/opencv-python-4.4.0.42.tar.gz (88.9MB)
+    Complete output from command python setup.py egg_info:
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+      File "/tmp/pip-build-cciracwm/opencv-python/setup.py", line 9, in <module>
+        import skbuild
+    ModuleNotFoundError: No module named 'skbuild'
+```
+
+biasanya butuh dilakukan upgrade pip. Jika mengalami hal diatas maka jalankan perintah dibawah ini
+
+```console
+pip install --upgrade pip
+pip install opencv-python
+```
+
 Jika proses sudah selesai untuk ujicoba silahkan jalankan perintah dibawah ini untuk cek versi openCV yang terinstall pada terminal
 
 ```console
@@ -580,7 +602,19 @@ Coba jalankan code diatas dan amati hasilnya.
 ## Mengelola Warna Citra
 ---
 
+Pada bab ini kita akan belajar mengolah citra dengan merubah warnanya, atau mengkonversinya serta melakukan operasi-operasi citra dasar seperti morfology.
 
+Silahkan buat folder **chapter3** pada folder kerja kita. Kemudian kita copykan folder *resources* yang ada pada chapter1 kedalam folder chapter2, sehingga strukturnya seperti dibawah ini
+
+```console
+BelajarOpenCV
+|-chapter1
+|-chapter2
+|-chapter3
+    |-resources
+        |-lenna.png
+        |-video.mp4 
+```
 
 
 
