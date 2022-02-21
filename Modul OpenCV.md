@@ -19,8 +19,8 @@ Modul ini menggunakan lisensi [Creative Common](https://creativecommons.org/lice
 - [Chapter 1 - Konsep Gambar Digital](#konsep-gambar-digital)
 - [Chapter 2 - Persiapan dan Installasi](#persiapan-dan-installasi)
 - [Chapter 3 - Membaca Gambar, Video dan Camera](#membaca-gambar-dan-video)
-- [Chapter 4 - Mengelola Citra Digital Bag 1](#mengelola-citra-digital)
-- [Chapter 5 - Mengelola Citra Digital Bag 2](#mengelola-warna-citra)
+- [Chapter 4 - Mengelola Citra Digital Bag 1](#mengelola-citra-digital-1)
+- [Chapter 5 - Mengelola Citra Digital Bag 2](#mengelola-citra-digital-2)
 - Chapter 6
 - Chapter 7
 - Chapter 8
@@ -316,7 +316,7 @@ Coba jalankan code diatas dan amatilah.
 pada code `cv2.imwrite('resources/pic1.png',frame)` berfungsi untuk menyimpan frame yang aktif dari camera dan disimpan dalam folder **resources** dengan nama file **pic1.png**.  Itu semua akan dijalankan saat ditekan tombol Y.
 
 
-## Mengelola Citra Digital
+## Mengelola Citra Digital 1
 ---
 
 Setelah kita bisa memuat gambar dan video, baik dalam bentuk file maupun dari camera. Sekarang kita akan belajar bagaimana mengelolanya dengan openCV.
@@ -599,10 +599,10 @@ cv2.destroyAllWindows()
 
 Coba jalankan code diatas dan amati hasilnya.
 
-## Mengelola Warna Citra
+## Mengelola Citra Digital 2
 ---
 
-Pada bab ini kita akan belajar mengolah citra dengan merubah warnanya, atau mengkonversinya serta melakukan operasi-operasi citra dasar seperti morfology.
+Pada bab ini kita akan belajar mengolah citra dengan merubah warnanya, *filtering*, atau ubah channel serta melakukan operasi-operasi citra dasar seperti *morfology*.
 
 Silahkan buat folder **chapter3** pada folder kerja kita. Kemudian kita copykan folder *resources* yang ada pada chapter1 kedalam folder chapter2, sehingga strukturnya seperti dibawah ini
 
