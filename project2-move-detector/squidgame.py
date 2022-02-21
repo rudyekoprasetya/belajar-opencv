@@ -9,11 +9,11 @@ cam.set(4,480)
 
 while True:
     ret, frame1=cam.read()
-    ret, frame2=cam.read()
-    # diff
-    diff = cv2.absdiff(frame1,frame2)
+    # ret, frame2=cam.read()
+    # # diff
+    # diff = cv2.absdiff(frame1,frame2)
     # ubah ke grayscale
-    gray = cv2.cvtColor(diff,cv2.COLOR_RGB2GRAY)
+    gray = cv2.cvtColor(frame1,cv2.COLOR_RGB2GRAY)
     # blur
     blur = cv2.GaussianBlur(gray,(5,5),0)
     # threshold

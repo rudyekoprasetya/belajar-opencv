@@ -32,8 +32,35 @@ while True:
     threshold2=cv2.getTrackbarPos("threshold2","parameter")
     canny=cv2.Canny(gray,threshold1,threshold2)
 
+    contours,_ = cv2.findContours(canny, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+
+    for contour in contours:
+    
+        approx = cv2.approxPolyDP(contour, 0.01 * cv2.arcLength(contour, True), True)
+        # print(len(approx))
+
+        cv2.drawContours(img, [contour], 0, (255, 0, 0), 5)
+
+        #cari tengah shape
+        M = cv2.moments(contour)
+        if M['m00'] != 0.0:
+            x = int(M['m10']/M['m00'])
+            y = int(M['m01']/M['m00'])
+
+        if len(approx) == 3:
+            cv2.putText(img, 'Triangle', (x, y),cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 2)  
+        elif len(approx) == 4:
+            cv2.putText(img, 'rectangle', (x, y),cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 2)    
+        elif len(approx) == 5:
+            cv2.putText(img, 'Pentagon', (x, y),cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 2)    
+        elif len(approx) == 6:
+            cv2.putText(img, 'Hexagon', (x, y),cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 2)    
+        else:
+            cv2.putText(img, 'circle', (x, y),cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 2)
+    
+
     cv2.imshow("original",img)
-    cv2.imshow("gray",gray)
+    # cv2.imshow("gray",gray)
     cv2.imshow("canny",canny)
 
     if cv2.waitKey(1) == ord("q"):
