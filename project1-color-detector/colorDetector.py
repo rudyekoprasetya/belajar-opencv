@@ -11,7 +11,7 @@ def empty(a):
     pass
 
 cv2.namedWindow("HSV")
-cv2.resizeWindow("HSC",640,240)
+cv2.resizeWindow("HSV",640,240)
 cv2.createTrackbar("HUE min", "HSV", 0, 179, empty)
 cv2.createTrackbar("HUE max", "HSV", 179, 179, empty)
 cv2.createTrackbar("SAT min", "HSV", 0, 255, empty)
