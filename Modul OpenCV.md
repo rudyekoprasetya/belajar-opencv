@@ -21,7 +21,7 @@ Modul ini menggunakan lisensi [Creative Common](https://creativecommons.org/lice
 - [Chapter 3 - Membaca Gambar, Video dan Camera](#membaca-gambar-dan-video)
 - [Chapter 4 - Mengelola Citra Digital Bag 1](#mengelola-citra-digital-1)
 - [Chapter 5 - Mengelola Citra Digital Bag 2](#mengelola-citra-digital-2)
-- Chapter 6
+- [Chapter 6 - Mengelola Citra Digital Bag 3](#mengelola-citra-digital-3)
 - Chapter 7
 - Chapter 8
 - Chapter 9
@@ -639,11 +639,143 @@ BelajarOpenCV
         |-video.mp4 
 ```
 
+Pertama kita buat file baru dengan nama **img_filter.py**
+
+```python
+import cv2
+import imutils
+
+#load image
+image = cv2.imread("resources/lenna.png")
+
+#ubah ke grayscale
+grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+#tampilkan hasil
+cv2.imshow("original",image)
+cv2.imshow("grayscale",grayscale)
+
+cv2.waitKey(0)
+```
+
+coba jalankan file diatas dan amatilah hasilnya.
+
+Kemudian kita akan coba membuat gambar menjadi blur dengan Gaussian Filter. Gaussian filter adalah filter dengan nilai pembobotan untuk tiap pixel. Filter ini sangat baik digunakan untuk menghilangkan noise yang bersifat sebaran normal yang biasanya digunakan untuk gambar digital hasil proses kamera.
+
+Silahkan ubah code diatas menjadi dibawah ini
+
+```python
+import cv2
+import imutils
+
+#load image
+image = cv2.imread("resources/lenna.png")
+
+#blur
+blur = cv2.GaussianBlur(image,(5,5),1)
+
+#tampilkan hasil
+cv2.imshow("original",image)
+cv2.imshow("blur",blur)
+
+cv2.waitKey(0)
+```
+
+Coba jalankan dan cermati perbedaanya.
+
+untuk nilai `(5,5)` adalah nilai kernel. **Kernel** adalah matriks kecil yang digunakan untuk menerapkan efek seperti yang mungkin Anda temukan di Photoshop atau Gimp, seperti mengaburkan, mempertajam, menguraikan, atau mengembos sebuah gambar. untuk nilai terakhir yaitu 1 digunakan untuk standar deviasi dari matrik atau pixel.
+
+selanjutnya kita akan mengkonversi gambar tersebut ke biner dengan menggunakan fungsi threshold. silahkan ubah code **img_filter.py** menjadi dibawah ini
+
+```python
+import cv2
+import imutils
+
+#load image
+image = cv2.imread("resources/lenna.png")
+
+#ubah ke grayscale
+grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+#ubah ke binary image
+_, binary = cv2.threshold(grayscale, 127, 255, cv2.THRESH_BINARY)
+
+#tampilkan hasil
+cv2.imshow("original",image)
+cv2.imshow("grayscale",grayscale)
+cv2.imshow("binary",binary)
+
+cv2.waitKey(0)
+```
+coba jalankan file diatas dan bandingkan hasilnya
+
+**Thresholding** adalah proses mengubah citra berderajat keabuan menjadi citra biner atau hitam putih sehingga dapat diketahui daerah mana yang termasuk obyek dan background dari citra secara jelas. Citra hasil thresholding biasanya digunakan lebih lanjut untuk proses pengenalan obyek serta ekstraksi fitur.Yang pertama kita lakukan adalah sumber gambar yang akan diubah. **Ini harus gambar grayscale**. Kedua adalah nilai ambang (threshold) yang digunakan untuk mengklasifikasikan nilai-nilai pixel nilainya antara 0 s/d 255. Ketiga adalah maxVal yang mewakili nilai yang akan diberikan jika nilai piksel lebih dari atau kurang dari nilai ambang(0 s/d 255). Coba ubah-ubah parameternya agar sesuai dengan keinginan.
+
+Selain threshold kita bisa menggunakan fungsi **canny** untuk merubah image ke binary dan mendeteksi garis tepinya. berikut adalah contohnya
+
+```python
+import cv2
+import imutils
+
+#load image
+image = cv2.imread("resources/lenna.png")
+
+#ubah ke grayscale
+grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+#ubah ke binary image
+_, binary = cv2.threshold(grayscale, 127, 255, cv2.THRESH_BINARY)
+#canny
+canny = cv2.Canny(grayscale, 127, 255)
+
+#tampilkan hasil
+cv2.imshow("original",image)
+cv2.imshow("grayscale",grayscale)
+cv2.imshow("binary",binary)
+cv2.imshow("canny",canny)
+
+cv2.waitKey(0)
+```
+
+Coba jalankan ulang dan cermati perbedaanya.
+
+**Morfologi** digunakan untuk mengolah bentuk obyek dari citra biner untuk menghilangkan gangguan atau *noise*  yang tidak termasuk bagian dari obyek. Operasi ini digunakan untuk memperjelas obyek dan menghilangkan celah-celah yang ada dilingkungannya.
+
+![morfology](https://itanurjanah.files.wordpress.com/2019/03/figure.jpg)
+
+Buat file **morphology.py** dan tambahkan code dibawah ini 
+
+```python
+import cv2
+
+img = cv2.imread("resources/lenna.png")
+
+erosi = cv2.erode(img,kernel,iterations = 1)
+dilasi = cv2.dilate(erosi,kernel,iterations = 1)
+opening = cv2.morphologyEx(dilasi, cv2.MORPH_OPEN, kernel)
+closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
+
+cv2.imshow("original", img)
+cv2.imshow("erosi", erosi)
+cv2.imshow("dilasi", dilasi)
+cv2.imshow("opening", opening)
+cv2.imshow("closing", closing)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+
+Coba jalankan dan cermati perbedaan masing-masing
+
+operasi dilasi digunakan untuk menambahkan atau mempertebal pixel objek atau memperbesar ukuran objek. sedangkan erosi adalah kebalikannya, digunakan untuk menghapus pixel atau memperkecil ukuran objek. Sedangkan *opening* dan *closing* adalah operasi gabungan antara erosi dan dilasi.
+
+## Mengelola Citra Digital 3
+---
+
 
 
 ## Referensi
  
  - Computer Vision : Foundation and Application, Standford University
+ - Ahmad, Usman. 2005. *Pengolahan Citra Digital dan Teknik Pemrograman*. Yogyakarta: Graha Ilmu.
  - [https://id.wikipedia.org/wiki/Piksel](https://id.wikipedia.org/wiki/Piksel)
  - [https://iglab.tech/mengenal-konsep-dasar-computer-vision-part-1/](https://iglab.tech/mengenal-konsep-dasar-computer-vision-part-1/)
  - [https://iglab.tech/mengenal-konsep-dasar-computer-vision-part-2/](https://iglab.tech/mengenal-konsep-dasar-computer-vision-part-2/)
@@ -653,4 +785,5 @@ BelajarOpenCV
  - [https://linuxize.com/post/how-to-install-opencv-on-ubuntu-20-04/](https://linuxize.com/post/how-to-install-opencv-on-ubuntu-20-04/)
  - [https://iglab.tech/opencv-part-1-meng-load-dan-menampilkan-image/](https://iglab.tech/opencv-part-1-meng-load-dan-menampilkan-image/)
  - [https://stackoverflow.com/questions/4179220/capture-single-picture-with-opencv](https://stackoverflow.com/questions/4179220/capture-single-picture-with-opencv)
+ - [https://itanurjanah.wordpress.com/2019/03/17/operasi-morfologi-menggunakan-opencv-python/](https://itanurjanah.wordpress.com/2019/03/17/operasi-morfologi-menggunakan-opencv-python/)
 
