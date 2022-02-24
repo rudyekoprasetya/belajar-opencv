@@ -100,7 +100,7 @@ Hal-hal yang harus dipersiapkan sebelum belajar adalah
 2. Install Code Editor bisa [Sublime-text](https://www.sublimetext.com/download) atau [VS Code](https://code.visualstudio.com/download)
 3. Paham perintah dasar console / terminal / cmd. Silahkan merujuk [kesini](https://dev.to/kymiddleton/reference-guide-common-commands-for-terminal-6no)
 
-Setelah itu untuk memulai menggunakan laravel. Buatlah suatu folder kerja, semisal **Documents/Belajar-openCV** dimana nantinya akan kita gunakan sebagai workspace atau letak semua file kita. 
+Setelah itu untuk memulai menggunakannya. Buatlah suatu folder kerja, semisal **Documents/Belajar-openCV** dimana nantinya akan kita gunakan sebagai workspace atau letak semua file kita. 
 
 Untuk cek apakah python sudah terinstall anda bisa membuka terminal, kemudian ketikan perintah
 
@@ -147,6 +147,31 @@ pip install --upgrade pip
 pip install opencv-python
 ```
 
+Jika muncul versi yang diinstall semisal versi 4.5.x maka kita sudah berhasil melakukan installasi openCV.
+
+Atau jika kita melakukan installasi menggunakan GUI, terlebih dahulu download installer opencv disini [https://sourceforge.net/projects/opencvlibrary/files/4.5.4/opencv-4.5.4-vc14_vc15.exe/download](https://sourceforge.net/projects/opencvlibrary/files/4.5.4/opencv-4.5.4-vc14_vc15.exe/download)
+
+kemudian akan muncul tampilan installer seperti dibawah ini, kemudian klik **next**
+
+![install1](https://learnopencv.com/wp-content/uploads/2020/12/Installer-Welcome-Screen.jpg)
+
+kemudian pilih **I accept the agreement** kemudian pilih **next**
+
+![install2](https://learnopencv.com/wp-content/uploads/2020/12/Installer-License.jpg)
+
+selanjutnya kita diminta untuk menentukan lokasi installasi opencv, semisal kita install di drive C
+
+![install3](https://learnopencv.com/wp-content/uploads/2020/12/Installer-Select-Destination.jpg)
+
+Kemudian klik tombol **Install**
+
+![install4](https://learnopencv.com/wp-content/uploads/2020/12/Installer-Install.jpg)
+
+Tunggu sampai installasi selesai 
+
+![finish](https://learnopencv.com/wp-content/uploads/2020/12/Installer-Installing.jpg)
+
+
 Jika proses sudah selesai untuk ujicoba silahkan jalankan perintah dibawah ini untuk cek versi openCV yang terinstall pada terminal
 
 ```console
@@ -158,8 +183,6 @@ bila di OS windows
 ```console
 py -c "import cv2; print(cv2.__version__)"
 ```
-
-Jika muncul versi yang diinstall semisal versi 4.5.5 maka kita sudah berhasil melakukan installasi openCV.
 
 
 ## Membaca Gambar dan Video
@@ -625,6 +648,7 @@ BelajarOpenCV
  - [https://iglab.tech/mengenal-konsep-dasar-computer-vision-part-1/](https://iglab.tech/mengenal-konsep-dasar-computer-vision-part-1/)
  - [https://iglab.tech/mengenal-konsep-dasar-computer-vision-part-2/](https://iglab.tech/mengenal-konsep-dasar-computer-vision-part-2/)
  - [https://id.wikipedia.org/wiki/OpenCV](https://id.wikipedia.org/wiki/OpenCV)
+ - [https://learnopencv.com/install-opencv-on-windows/](https://learnopencv.com/install-opencv-on-windows/)
  - [https://rudyekoprasetya.wordpress.com/2021/08/14/kenapa-aku-belajar-python/](https://rudyekoprasetya.wordpress.com/2021/08/14/kenapa-aku-belajar-python/)
  - [https://linuxize.com/post/how-to-install-opencv-on-ubuntu-20-04/](https://linuxize.com/post/how-to-install-opencv-on-ubuntu-20-04/)
  - [https://iglab.tech/opencv-part-1-meng-load-dan-menampilkan-image/](https://iglab.tech/opencv-part-1-meng-load-dan-menampilkan-image/)
