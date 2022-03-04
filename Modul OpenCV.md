@@ -21,7 +21,7 @@ Modul ini menggunakan lisensi [Creative Common](https://creativecommons.org/lice
 - [Chapter 3 - Membaca Gambar, Video dan Camera](#membaca-gambar-dan-video)
 - [Chapter 4 - Mengelola Citra Digital Bag 1](#mengelola-citra-digital-1)
 - [Chapter 5 - Mengelola Citra Digital Bag 2](#mengelola-citra-digital-2)
-- [Chapter 6 - Mengelola Citra Digital Bag 3](#mengelola-citra-digital-3)
+- [Chapter 6 - Menyisipkan Objek ke Citra](#menyisipkan-objek)
 - Chapter 7
 - Chapter 8
 - Chapter 9
@@ -660,6 +660,9 @@ cv2.waitKey(0)
 
 coba jalankan file diatas dan amatilah hasilnya.
 
+
+Code `cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)` digunakan untuk konversi image dari RGB (dalam hal ini opencv terbalik BGR) menjadi warna grayscale. 
+
 Kemudian kita akan coba membuat gambar menjadi blur dengan Gaussian Filter. Gaussian filter adalah filter dengan nilai pembobotan untuk tiap pixel. Filter ini sangat baik digunakan untuk menghilangkan noise yang bersifat sebaran normal yang biasanya digunakan untuk gambar digital hasil proses kamera.
 
 Silahkan ubah code diatas menjadi dibawah ini
@@ -767,9 +770,124 @@ Coba jalankan dan cermati perbedaan masing-masing
 
 operasi dilasi digunakan untuk menambahkan atau mempertebal pixel objek atau memperbesar ukuran objek. sedangkan erosi adalah kebalikannya, digunakan untuk menghapus pixel atau memperkecil ukuran objek. Sedangkan *opening* dan *closing* adalah operasi gabungan antara erosi dan dilasi.
 
-## Mengelola Citra Digital 3
+## Menyisipkan Objek
 ---
 
+Didalam OpenCV kita jua bisa menyisipkan objek lain dalam citra digital seperti garis atau bentuk dasar seperti persegi, lingkaran bahkan text.
+
+Untuk praktikum silahkan buat folder kerja **chapter4** didalamnya buatlah file dengan nama **shape.py** dengan code dibawah ini
+
+```python
+import cv2
+import imutils
+
+#load camera resolusi 640 x 480
+cam = cv2.VideoCapture(0)
+cam.set(3,640)
+cam.set(4,480)
+
+while True:
+    ret, frame=cam.read()
+
+    # menggambar garis diagonal berwarna hijau
+    hasil = cv2.line(frame, (0,0), (640,480), (0,255,0), 3)
+
+    #menampilkan hasil
+    cv2.imshow("Hasil",hasil)
+
+    if cv2.waitKey(1) == ord("q"):
+        break
+
+cam.release()
+cv2.destroyAllWindows()
+```
+Coba jalankan code diatas dan cermati. code `cv2.line(frame, (0,0), (640,480), (0,255,0), 3)` digunakan untuk menggabar garis pada frame camera dimulai dari koordinat 0,0 s/d 640,480 dimana warnanya adalah hijau (0,255,0) dengan ketebalan garis 3.
+
+Selanjutnya kita akan belajar membuat objek kotak. Ubahlah code diatas menjadi dibawah ini
+
+```python
+import cv2
+import imutils
+
+#load camera resolusi 640 x 480
+cam = cv2.VideoCapture(0)
+cam.set(3,640)
+cam.set(4,480)
+
+while True:
+    ret, frame=cam.read()
+
+    # menggambar kotak ditengah gambar
+    hasil = cv2.rectangle(frame,(320,240),(240,320),(0,255,0),3)
+
+    #menampilkan hasil
+    cv2.imshow("Hasil",hasil)
+
+    if cv2.waitKey(1) == ord("q"):
+        break
+
+cam.release()
+cv2.destroyAllWindows()
+```
+code `cv2.rectangle(frame,(320,240),(240,320),(0,255,0),3)` berfungsi untuk menggambar kotak pada koordinat 320,240 sd 240,320 dengan warna hijau (0,255,0) dengan ketebalan garis 3.
+
+Selanjutnya kita akan belajar menyisipkan objek lingkaran. ubah code menjadi berikut ini
+
+```python
+import cv2
+import imutils
+
+#load camera resolusi 640 x 480
+cam = cv2.VideoCapture(0)
+cam.set(3,640)
+cam.set(4,480)
+
+while True:
+    ret, frame=cam.read()
+
+    # menyisipkan objek lingkaran
+    hasil = cv2.circle(frame, (320,240), 100, (0,0,255), 3)
+
+    #menampilkan hasil
+    cv2.imshow("Hasil",hasil)
+
+    if cv2.waitKey(1) == ord("q"):
+        break
+
+cam.release()
+cv2.destroyAllWindows()
+```
+Jika dijalankan maka akan muncul objek linkaran berwarna merah (0,0,255) pada koordinar (320,240) dengan radius 100 serta ketebalan garis 3.
+
+Untuk menyisipkan text pada citra silahkan ubah code menjadi berikut ini
+
+```python
+import cv2
+import imutils
+
+#load camera resolusi 640 x 480
+cam = cv2.VideoCapture(0)
+cam.set(3,640)
+cam.set(4,480)
+
+while True:
+    ret, frame=cam.read()
+
+    #Menempatkan text
+    hasil = cv2.putText(frame, 'Rudy Eko Prasetya', (10, 300), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,255,0), 5)
+
+    #menampilkan hasil
+    cv2.imshow("Hasil",hasil)
+
+    if cv2.waitKey(1) == ord("q"):
+        break
+
+cam.release()
+cv2.destroyAllWindows()
+```
+Code `cv2.putText(frame, 'Rudy Eko Prasetya', (10, 300), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,255,0), 5)` digunakan untuk menuliskan text **Rudy Eko Prasetya** pada citra di koordinat (10,300) dengan tipe font *FONT_HERSHEY_SIMPLEX* dengan ukuran 2, warna hijau serta ketebalan tulisan 5. Silahkan ubah parameter diatas sesuai dengan keinginan anda.
+
+selain fungsi sisipkan objek diatas ada beberapa code seperto `cv2.polygon`, `cv2.polyline` dan `cv2.ellipse` silahkan merujuk ke [https://docs.opencv.org/4.x/dc/da5/tutorial_py_drawing_functions.html](https://docs.opencv.org/4.x/dc/da5/tutorial_py_drawing_functions.html) untuk keterangan lebih lanjut.
 
 
 ## Referensi
@@ -786,4 +904,8 @@ operasi dilasi digunakan untuk menambahkan atau mempertebal pixel objek atau mem
  - [https://iglab.tech/opencv-part-1-meng-load-dan-menampilkan-image/](https://iglab.tech/opencv-part-1-meng-load-dan-menampilkan-image/)
  - [https://stackoverflow.com/questions/4179220/capture-single-picture-with-opencv](https://stackoverflow.com/questions/4179220/capture-single-picture-with-opencv)
  - [https://itanurjanah.wordpress.com/2019/03/17/operasi-morfologi-menggunakan-opencv-python/](https://itanurjanah.wordpress.com/2019/03/17/operasi-morfologi-menggunakan-opencv-python/)
+ - [https://www.ivanjul.com/tutorial-opencv-python-3-7-part-6-membuat-garis-line/](https://www.ivanjul.com/tutorial-opencv-python-3-7-part-6-membuat-garis-line/)
+ - [https://www.ivanjul.com/tutorial-opencv-python-3-7-part-7-membuat-kotak-rectangle/](https://www.ivanjul.com/tutorial-opencv-python-3-7-part-7-membuat-kotak-rectangle/)
+ - [https://www.ivanjul.com/tutorial-opencv-python-3-7-part-8-membuat-lingkaran-circle/](https://www.ivanjul.com/tutorial-opencv-python-3-7-part-8-membuat-lingkaran-circle/)
+ - [https://www.ivanjul.com/tutorial-opencv-python-3-7-part-9-membuat-text/](https://www.ivanjul.com/tutorial-opencv-python-3-7-part-9-membuat-text/)
 
