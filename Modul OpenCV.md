@@ -22,11 +22,11 @@ Modul ini menggunakan lisensi [Creative Common](https://creativecommons.org/lice
 - [Chapter 4 - Mengelola Citra Digital Bag 1](#mengelola-citra-digital-1)
 - [Chapter 5 - Mengelola Citra Digital Bag 2](#mengelola-citra-digital-2)
 - [Chapter 6 - Menyisipkan Objek ke Citra](#menyisipkan-objek)
-- Chapter 7
-- Chapter 8
-- Chapter 9
-- Chapter 10
-- Tentang Penyusun
+- [Project 1 - Deteksi Warna Citra](#project-1-deteksi-warna-citra)
+- [Project 2 - Deteksi Garis Tepi Citra](#project-2-deteksi-garis-tepi)
+- [Project 3 - Deteksi Benda](#project-3-deteksi-benda)
+- [Project 4 - Deteksi Wajah](#project-4-deteksi-wajah)
+- [Tentang Penyusun](#tentang-penyusun)
 
 ## Pengantar
 ---
@@ -890,6 +890,230 @@ Code `cv2.putText(frame, 'Rudy Eko Prasetya', (10, 300), cv2.FONT_HERSHEY_SIMPLE
 selain fungsi sisipkan objek diatas ada beberapa code seperto `cv2.polygon`, `cv2.polyline` dan `cv2.ellipse` silahkan merujuk ke [https://docs.opencv.org/4.x/dc/da5/tutorial_py_drawing_functions.html](https://docs.opencv.org/4.x/dc/da5/tutorial_py_drawing_functions.html) untuk keterangan lebih lanjut.
 
 
+## Project 1 Deteksi Warna Citra
+---
+
+Setelah belajar dasar-dasar pengolahan citra digital. Sekarang kita akan belajar beberapa project sederhana untuk opencv seperti aplikasi untuk deteksi warna 
+
+Untuk memulai silahkan buat folder **project1** dengan struktur folder sebagai berikut ini
+
+```console
+BelajarOpenCV
+|-chapter1
+|-chapter2
+|-chapter3
+|-chapter4
+|-project1
+    |-resources
+        |-color_detection.jpg
+```
+
+File gambar bisa anda download [disini](https://i.ibb.co/ZW78Yn8/color-detection.jpg)
+
+Selanjutnya buatlah file baru dengan nama **colorDetection.py**
+
+```python
+import cv2
+import numpy as np
+
+#load camera resolusi 640 x 480
+cam = cv2.VideoCapture(0)
+cam.set(3,320)
+cam.set(4,240)
+
+#membuat window
+def empty(a):
+    pass
+
+cv2.namedWindow("HSV")
+cv2.resizeWindow("HSV",640,240)
+cv2.createTrackbar("HUE min", "HSV", 0, 179, empty)
+cv2.createTrackbar("HUE max", "HSV", 179, 179, empty)
+cv2.createTrackbar("SAT min", "HSV", 0, 255, empty)
+cv2.createTrackbar("SAT max", "HSV", 255, 255, empty)
+cv2.createTrackbar("VAL min", "HSV", 0, 255, empty)
+cv2.createTrackbar("VAL max", "HSV", 255, 255, empty)
+
+
+while True:
+    ret, frame=cam.read()
+
+    #load gambar
+    image = cv2.imread("resources/color_detection.jpg")
+    # convert HSV
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+    h_min = cv2.getTrackbarPos("HUE min","HSV")
+    h_max = cv2.getTrackbarPos("HUE max","HSV")
+    s_min = cv2.getTrackbarPos("SAT min","HSV")
+    s_max = cv2.getTrackbarPos("SAT max","HSV")
+    v_min = cv2.getTrackbarPos("VAL min","HSV")
+    v_max = cv2.getTrackbarPos("VAL max","HSV")
+
+    # array warna
+    lower = np.array([h_min,s_min,v_min])
+    upper = np.array([h_max,s_max,v_max])
+    print([lower, upper])
+    #masking
+    mask = cv2.inRange(hsv,lower,upper)
+    result = cv2.bitwise_and(image, image, mask=mask)
+
+    gabung = np.hstack((image,result))
+
+    cv2.imshow("Color detection", gabung)
+
+    if cv2.waitKey(1) == ord("q"):
+        break
+
+cv2.destroyAllWindows()
+```
+
+Untuk penjelasan dari masing-masing code adalah sebagai berikut 
+
+```python
+cv2.namedWindow("HSV")
+cv2.resizeWindow("HSV",640,240)
+cv2.createTrackbar("HUE min", "HSV", 0, 179, empty)
+cv2.createTrackbar("HUE max", "HSV", 179, 179, empty)
+cv2.createTrackbar("SAT min", "HSV", 0, 255, empty)
+cv2.createTrackbar("SAT max", "HSV", 255, 255, empty)
+cv2.createTrackbar("VAL min", "HSV", 0, 255, empty)
+cv2.createTrackbar("VAL max", "HSV", 255, 255, empty)
+```
+
+digunakan untuk membuat trackbar dimana fungsinya adalah untuk menentukan nilai HUE, SATURATION dan VALUE (HSV) dari warna yang akan kita filter. 
+
+HSV mendefinisikan warna dalam terminologi Hue, Saturation dan Value. Keuntungan HSV adalah terdapat warna-warna yang sama dengan yang ditangkap oleh indra manusia. Sedangkan warna yang dibentuk model lain seperti RGB merupakan hasil campuran dari warna-warna primer.  
+
+- **Hue** : menyatakan warna sebenarnya, seperti merah, violet, dan kuning dan digunakan menentukan kemerahan (redness), kehijauan (greeness), dsb.  
+- **Saturation** : kadang disebut chroma, adalah kemurnian atau kekuatan warna.
+- **Value** : kecerahan dari warna. Nilainya berkisar antara 0-100 %. Apabila nilainya 0 maka warnanya akan menjadi hitam, semakin besar nilai maka semakin cerah dan  muncul variasi-variasi baru dari warna tersebut.
+
+Disini saya gunakan fungsi untuk camera agar setiap perubahan yang kita lakukan pada trackbar akan dijalankan secara real time dan kita load gambar **color_detection.jpg**
+
+```python
+while True:
+    ret, frame=cam.read()
+
+    #load gambar
+    image = cv2.imread("resources/color_detection.jpg")
+```
+
+Selanjutnya gambar tersebut di konversi ke warna HSV `hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)`. Kemudian masing-masing nilai dari trackbar kita masukan dalam variable dan dimasukan dalam sebuah array untuk batas nilai atas dan bawah suatu warna. kemudia kita cetak hasilnya dalam Terminal. Hal ini bertujuan agar kita mengetahui range nilai suatu warna.
+
+
+```python
+h_min = cv2.getTrackbarPos("HUE min","HSV")
+h_max = cv2.getTrackbarPos("HUE max","HSV")
+s_min = cv2.getTrackbarPos("SAT min","HSV")
+s_max = cv2.getTrackbarPos("SAT max","HSV")
+v_min = cv2.getTrackbarPos("VAL min","HSV")
+v_max = cv2.getTrackbarPos("VAL max","HSV")
+
+# array warna
+lower = np.array([h_min,s_min,v_min])
+upper = np.array([h_max,s_max,v_max])
+print([lower, upper])
+```
+
+Selanjutnya hasil dari array tersebut kita masking dan kita gabungkan dengan gambar untuk mendapatkan warna yang akan di filter
+
+```python
+#masking
+mask = cv2.inRange(hsv,lower,upper)
+result = cv2.bitwise_and(image, image, mask=mask)
+```
+
+Yang terakhit adalah memunculkan hasil gambar asli dan hasil filternya
+
+```python
+gabung = np.hstack((image,result))
+
+cv2.imshow("Color detection", gabung)
+```
+
+Coba jalankan file diatas dan lakukan perubahan pada nilai HSV masing-masing. Lakukan filter sampai yang tersisa hanya warna merah seperti dibawah ini.
+
+![red filter](https://i.ibb.co/tqjnwSz/red.jpg)
+
+Amati hasil dari print arraynya. Bisa disimpulkan bahwa warna merah dari nilai HSVnya dari [0,150,0] sd [10,255,255]. Coba cari pula untuk warna biru
+
+![blue filter](https://i.ibb.co/7SDF449/blue.jpg)
+
+bisa dilihat kita dapati HSVnya adalah [90,150,0] sd [130,255,255]
+
+Anda bisa bereksperimen untuk warna-warna lainnya seperti warna kuning dibawah ini
+
+![yellow filter](https://i.ibb.co/x2LnYNx/yellow.jpg)
+
+catatlah nilai HSV dari masing-masing filter warna yang sudah anda dapat ini.
+
+Selanjutnya kita akan membuat camera yang bisa mendeteksi warna dari objek yang ada didepannya.
+
+Silahkan buat file **color-cam.py** dengan code dibawah ini
+
+```python
+import cv2
+import numpy as np
+
+#load camera resolusi 640 x 480
+cam = cv2.VideoCapture(0)
+cam.set(3,320)
+cam.set(4,240)
+
+while True:
+    ret, frame=cam.read()
+
+    # convert HSV
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    #array warna merah
+    low_red = np.array([0,150,0], np.uint8)
+    up_red = np.array([10,255,255], np.uint8)
+    #array warna biru
+    low_blue = np.array([90,150,0], np.uint8)
+    up_blue = np.array([130,255,255], np.uint8)
+    #array warna hijau
+    low_green = np.array([50,130,0], np.uint8)
+    up_green = np.array([90,255,255], np.uint8)
+
+    #masking merah
+    mask_red = cv2.inRange(hsv,low_red,up_red)
+    res_red = cv2.bitwise_and(frame, frame, mask=mask_red)
+
+    #masking biru
+    mask_blue = cv2.inRange(hsv,low_blue,up_blue)
+    res_blue = cv2.bitwise_and(frame, frame, mask=mask_blue)
+
+    #masking hijaun
+    mask_green = cv2.inRange(hsv,low_green,up_green)
+    res_green = cv2.bitwise_and(frame, frame, mask=mask_green)
+    
+    gabung1 = np.hstack((frame,res_red))
+    gabung2 = np.hstack((res_green,res_blue))
+    gabung = np.vstack((gabung1,gabung2))
+
+    cv2.imshow("Camera Color Detection", gabung)
+
+    if cv2.waitKey(1) == ord("q"):
+        break
+
+cam.release()
+cv2.destroyAllWindows()
+```
+
+Jika dijalankan maka sebagai berikut ini
+
+![color detection](https://i.ibb.co/f9NvLLC/color-detect.jpg)
+
+masing-masing warna akan dimasking sesuai dengan batas nilai array yang sudah ditentukan sehingga bisa ke filter sesuai dengan warna yang diinginkan.
+
+
+
+
+
+
+
 ## Referensi
  
  - Computer Vision : Foundation and Application, Standford University
@@ -908,4 +1132,5 @@ selain fungsi sisipkan objek diatas ada beberapa code seperto `cv2.polygon`, `cv
  - [https://www.ivanjul.com/tutorial-opencv-python-3-7-part-7-membuat-kotak-rectangle/](https://www.ivanjul.com/tutorial-opencv-python-3-7-part-7-membuat-kotak-rectangle/)
  - [https://www.ivanjul.com/tutorial-opencv-python-3-7-part-8-membuat-lingkaran-circle/](https://www.ivanjul.com/tutorial-opencv-python-3-7-part-8-membuat-lingkaran-circle/)
  - [https://www.ivanjul.com/tutorial-opencv-python-3-7-part-9-membuat-text/](https://www.ivanjul.com/tutorial-opencv-python-3-7-part-9-membuat-text/)
+ - [http://www.kitainformatika.com/2015/01/ruang-warna-hue-saturation-value-hsv.html](http://www.kitainformatika.com/2015/01/ruang-warna-hue-saturation-value-hsv.html)
 
