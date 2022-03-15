@@ -229,7 +229,9 @@ Kemudian buka terminal atau console, masuk kedalam folder chapter1 dan jalankan 
 py read_img.py
 ```
 
-Amatilah jendela apa yang muncul. 
+Amatilah Maka akan muncul tampilan berikut
+
+![baca image](https://i.ibb.co/wWxvzKh/Selection-009.png)
 
 Code `imread("resources/lenna.png")` digunakan untuk membaca file gambar dari path atau komputer kita. Pastikan path atau jalur ke file tersebut tepat beserta nama filenya, contohnya adalah file gambar lenna.png ada didalam folder resources. Sedangkan code `imshow("Hasil",img)` digunakan untuk menampilkan hasil dalam suatu jendela dengan nama Windows *Hasil*. Untuk code `cv2.waitKey(0)` digunakan untuk menghentikan eksekusi sementara. `cv2.waitKey` menerima satu argumen integer yang berperan sebagai delay (dalam milisenconds) menampilkan frame hingga frame tersebut akan secara otomatis di-close. 
 
@@ -299,7 +301,9 @@ Jalankan file diatas dengan perintah
 py read_cam.py
 ```
 
-Amatilah hasilnya. 
+Amatilah hasilnya. Jika benar maka camera internal akan aktif seperti dibawah ini
+
+![read cam](https://i.ibb.co/6NXFW9K/Selection-010.png)
 
 Code `cap.set(3,640)` dan `cap.set(4,480)` digunakan untuk merubah resolusi camera yang ditampilkan. kemudian hasilnya ditampilkan dengan code `cv.imshow("camera",frame)`.  Untuk menghapus cache file menggunakan code `cap.release()` dan `cv2.destroyAllWindows()`. Untuk menutup jendela tekan tombol Q.
 
@@ -380,6 +384,8 @@ cv2.waitKey(0)
 
 coba jalankan file tersebut, dan amatilah yang terjadi.
 
+![translasi](https://i.ibb.co/W3DwzrX/Selection-011.png)
+
 Pada dasarnya translasi digunakan untuk mengeser gambar ke suatu koordinat tertentu, hal ini bisa dilihat pada code `imutils.translate(img, x, y)` nilai X positif akan menggeser image ke kanan sedangkan nilai y positif akan menggeser image ke bawah. Dalam hal ini berlaku untuk kebalikannya.
 
 Coba ubahlah kode diatas menjadi dibawah ini
@@ -417,6 +423,8 @@ cv2.waitKey(0)
 ```
 
 Jalankan file tersebut dan amatilah perbedaanya.
+
+![rotasi](https://i.ibb.co/6gHJzq6/Selection-012.png)
 
 fungsi `imutils.rotate(img, angle)` digunakan untuk memutar citra dengan sudut derajat tertentu. untuk nilai positif objek akan diputar berlawanan arah jarum jam. Untuk negatif objek akan diputar searah jarum jam.  
 
@@ -470,6 +478,8 @@ cv2.waitKey(0)
 ```
 
 Coba jalankan dan bandingkan hasilnya dengan gambar asli.
+
+![resize](https://i.ibb.co/FV4qJkB/Selection-013.png)
 
 kita bisa jua menggunakan imutils agar aspect ratio saat resize sesuai. Coba ubahlah coding diatas menjadi dibawah ini
 
@@ -560,6 +570,8 @@ cv2.imshow('gambar crop',img_crop)
 cv2.waitKey(0)
 ```
 Coba jalankan dan bandingkan hasilnya dengan gambar aslinya.
+
+![crop](https://i.ibb.co/hWD0QRW/Selection-014.png)
 
 Terakhir kita akan coba menggabungkan beberapa citra menjadi satu. disini kita akan menggunakan *library numpy*. 
 
@@ -660,6 +672,7 @@ cv2.waitKey(0)
 
 coba jalankan file diatas dan amatilah hasilnya.
 
+![grayscale](https://i.ibb.co/L1ZSs1y/Selection-015.png)
 
 Code `cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)` digunakan untuk konversi image dari RGB (dalam hal ini opencv terbalik BGR) menjadi warna grayscale. 
 
@@ -686,6 +699,8 @@ cv2.waitKey(0)
 
 Coba jalankan dan cermati perbedaanya.
 
+![blur](https://i.ibb.co/jfbNwqX/Selection-016.png)
+
 untuk nilai `(5,5)` adalah nilai kernel. **Kernel** adalah matriks kecil yang digunakan untuk menerapkan efek seperti yang mungkin Anda temukan di Photoshop atau Gimp, seperti mengaburkan, mempertajam, menguraikan, atau mengembos sebuah gambar. untuk nilai terakhir yaitu 1 digunakan untuk standar deviasi dari matrik atau pixel.
 
 selanjutnya kita akan mengkonversi gambar tersebut ke biner dengan menggunakan fungsi threshold. silahkan ubah code **img_filter.py** menjadi dibawah ini
@@ -710,6 +725,8 @@ cv2.imshow("binary",binary)
 cv2.waitKey(0)
 ```
 coba jalankan file diatas dan bandingkan hasilnya
+
+![binary](https://i.ibb.co/7r5kzBJ/Selection-017.png)
 
 **Thresholding** adalah proses mengubah citra berderajat keabuan menjadi citra biner atau hitam putih sehingga dapat diketahui daerah mana yang termasuk obyek dan background dari citra secara jelas. Citra hasil thresholding biasanya digunakan lebih lanjut untuk proses pengenalan obyek serta ekstraksi fitur.Yang pertama kita lakukan adalah sumber gambar yang akan diubah. **Ini harus gambar grayscale**. Kedua adalah nilai ambang (threshold) yang digunakan untuk mengklasifikasikan nilai-nilai pixel nilainya antara 0 s/d 255. Ketiga adalah maxVal yang mewakili nilai yang akan diberikan jika nilai piksel lebih dari atau kurang dari nilai ambang(0 s/d 255). Coba ubah-ubah parameternya agar sesuai dengan keinginan.
 
@@ -739,6 +756,8 @@ cv2.waitKey(0)
 ```
 
 Coba jalankan ulang dan cermati perbedaanya.
+
+![canny](https://i.ibb.co/54SfydH/Selection-018.png)
 
 **Morfologi** digunakan untuk mengolah bentuk obyek dari citra biner untuk menghilangkan gangguan atau *noise*  yang tidak termasuk bagian dari obyek. Operasi ini digunakan untuk memperjelas obyek dan menghilangkan celah-celah yang ada dilingkungannya.
 
@@ -801,7 +820,11 @@ while True:
 cam.release()
 cv2.destroyAllWindows()
 ```
-Coba jalankan code diatas dan cermati. code `cv2.line(frame, (0,0), (640,480), (0,255,0), 3)` digunakan untuk menggabar garis pada frame camera dimulai dari koordinat 0,0 s/d 640,480 dimana warnanya adalah hijau (0,255,0) dengan ketebalan garis 3.
+Coba jalankan code diatas dan cermati. 
+
+![line](https://i.ibb.co/r3bPVHf/Selection-019.png)
+
+code `cv2.line(frame, (0,0), (640,480), (0,255,0), 3)` digunakan untuk menggabar garis pada frame camera dimulai dari koordinat 0,0 s/d 640,480 dimana warnanya adalah hijau (0,255,0) dengan ketebalan garis 3.
 
 Selanjutnya kita akan belajar membuat objek kotak. Ubahlah code diatas menjadi dibawah ini
 
@@ -829,6 +852,8 @@ while True:
 cam.release()
 cv2.destroyAllWindows()
 ```
+![kotak](https://i.ibb.co/715v0kC/Selection-020.png)
+
 code `cv2.rectangle(frame,(320,240),(240,320),(0,255,0),3)` berfungsi untuk menggambar kotak pada koordinat 320,240 sd 240,320 dengan warna hijau (0,255,0) dengan ketebalan garis 3.
 
 Selanjutnya kita akan belajar menyisipkan objek lingkaran. ubah code menjadi berikut ini
@@ -857,7 +882,9 @@ while True:
 cam.release()
 cv2.destroyAllWindows()
 ```
-Jika dijalankan maka akan muncul objek linkaran berwarna merah (0,0,255) pada koordinar (320,240) dengan radius 100 serta ketebalan garis 3.
+Jika dijalankan maka akan muncul objek linkaran berwarna merah (0,0,255) pada koordinar (320,240) dengan radius 100 serta ketebalan garis 3 seperti dibawah ini
+
+![lingkaran](https://i.ibb.co/Q7Vn2wQ/Selection-021.png)
 
 Untuk menyisipkan text pada citra silahkan ubah code menjadi berikut ini
 
@@ -885,6 +912,8 @@ while True:
 cam.release()
 cv2.destroyAllWindows()
 ```
+![text](https://i.ibb.co/Y2wk3HR/Selection-022.png)
+
 Code `cv2.putText(frame, 'Rudy Eko Prasetya', (10, 300), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,255,0), 5)` digunakan untuk menuliskan text **Rudy Eko Prasetya** pada citra di koordinat (10,300) dengan tipe font *FONT_HERSHEY_SIMPLEX* dengan ukuran 2, warna hijau serta ketebalan tulisan 5. Silahkan ubah parameter diatas sesuai dengan keinginan anda.
 
 selain fungsi sisipkan objek diatas ada beberapa code seperto `cv2.polygon`, `cv2.polyline` dan `cv2.ellipse` silahkan merujuk ke [https://docs.opencv.org/4.x/dc/da5/tutorial_py_drawing_functions.html](https://docs.opencv.org/4.x/dc/da5/tutorial_py_drawing_functions.html) untuk keterangan lebih lanjut.
@@ -1108,10 +1137,61 @@ Jika dijalankan maka sebagai berikut ini
 
 masing-masing warna akan dimasking sesuai dengan batas nilai array yang sudah ditentukan sehingga bisa ke filter sesuai dengan warna yang diinginkan.
 
+Untuk Contoh project sederhana mengenai color detector dengan menggunakan camera. Silahkan buat file baru dengan nama **rgb_detector.py**
+
+```python
+import cv2
+import numpy as np
+
+#load camera resolusi 640 x 480
+cam = cv2.VideoCapture(0)
+cam.set(3,320)
+cam.set(4,240)
+
+while True:
+    ret, frame=cam.read()
+
+    
+
+    # setting values for base colors
+    b = frame[:, :, :1]
+    g = frame[:, :, 1:2]
+    r = frame[:, :, 2:]
+  
+    # computing the mean
+    b_mean = np.mean(b)
+    g_mean = np.mean(g)
+    r_mean = np.mean(r)
+
+    warna = ''
+
+    if (b_mean > g_mean and b_mean > r_mean):
+        warna = 'BIRU'
+        cv2.putText(frame, warna, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 3)
+    elif (g_mean > r_mean and g_mean > b_mean):
+        warna = 'HIJAU'
+        cv2.putText(frame, warna, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 3)
+    else:
+        warna = 'MERAH'
+        cv2.putText(frame, warna, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 3)
 
 
+    
+    cv2.imshow("Color Detection", frame)
 
+    if cv2.waitKey(1) == ord("q"):
+        break
 
+cam.release()
+cv2.destroyAllWindows()
+```
+Coba jalankan dan arahkan beberapa objek yang berwarna merah, biru dan hijaun satu persatu
+
+![colordetect](https://i.ibb.co/QbnnVTN/Selection-025.png)
+
+Maka secara otomatis camera akan mendeteksi dan menuliskan hasil pembacaan warnanya seperti dibawah ini
+
+![colordetect](https://i.ibb.co/71g0kKZ/Selection-023.png)
 
 
 ## Referensi

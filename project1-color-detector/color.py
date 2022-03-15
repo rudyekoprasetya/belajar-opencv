@@ -25,13 +25,16 @@ while True:
 
     if (b_mean > g_mean and b_mean > r_mean):
         warna = 'BIRU'
+        cv2.putText(frame, warna, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 3)
     elif (g_mean > r_mean and g_mean > b_mean):
         warna = 'HIJAU'
+        cv2.putText(frame, warna, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 3)
     else:
         warna = 'MERAH'
+        cv2.putText(frame, warna, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 3)
 
 
-    cv2.putText(frame, warna, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 3)
+    
     cv2.imshow("Color Detection", frame)
 
     if cv2.waitKey(1) == ord("q"):
