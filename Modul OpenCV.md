@@ -1053,7 +1053,7 @@ mask = cv2.inRange(hsv,lower,upper)
 result = cv2.bitwise_and(image, image, mask=mask)
 ```
 
-Yang terakhit adalah memunculkan hasil gambar asli dan hasil filternya
+Yang terakhir adalah memunculkan hasil gambar asli dan hasil filternya
 
 ```python
 gabung = np.hstack((image,result))
@@ -1151,8 +1151,6 @@ cam.set(4,240)
 while True:
     ret, frame=cam.read()
 
-    
-
     # setting values for base colors
     b = frame[:, :, :1]
     g = frame[:, :, 1:2]
@@ -1192,6 +1190,124 @@ Coba jalankan dan arahkan beberapa objek yang berwarna merah, biru dan hijaun sa
 Maka secara otomatis camera akan mendeteksi dan menuliskan hasil pembacaan warnanya seperti dibawah ini
 
 ![colordetect](https://i.ibb.co/71g0kKZ/Selection-023.png)
+ 
+## Project 2 Deteksi Garis Tepi
+---
+
+Kali ini kita membuat project untuk mendeteksi garis tepi dari citra. Dimana kita akan menghitung jumlah coin yang ada pada suatu gambar.
+
+```console
+BelajarOpenCV
+|-chapter1
+|-chapter2
+|-chapter3
+|-chapter4
+|-project1
+|-project2
+    |-resources
+        |-coin.jpg
+```
+
+File gambar bisa didownload [disini](https://images.unsplash.com/photo-1625806785652-f4427c3fda40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8Y29pbnxlbnwwfHwwfHw%3D&w=1000&q=80). Kemudian simpan dengan nama file **coin.jpg** simpan dalam folder resources.
+
+Kemudian buatlah file **coinDetector.py**
+
+```python
+import cv2
+import imutils
+import numpy as np
+
+cap = cv2.VideoCapture(0)
+cap.set(3,640)
+cap.set(4,480)
+
+# buat trackbar
+def empty(a):
+    pass
+
+cv2.namedWindow("parameter")
+cv2.resizeWindow("parameter",640,240)
+cv2.createTrackbar("threshold1","parameter",0,500,empty)
+cv2.createTrackbar("threshold2","parameter",255,500,empty)
+
+while True:
+    ret, frame=cap.read()
+
+    img = cv2.imread('resources/coin1.jpg')
+
+    img = imutils.resize(img, width=300)
+
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    blur = cv2.GaussianBlur(gray, (5,5), 0)
+
+    threshold1=cv2.getTrackbarPos("threshold1","parameter")
+    threshold2=cv2.getTrackbarPos("threshold2","parameter")
+    canny = cv2.Canny(blur, threshold1, threshold2)
+
+    dilasi = cv2.dilate(canny, (1,1), iterations=0)
+
+    contour, _ = cv2.findContours(dilasi.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+
+    color = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    cv2.drawContours(color, contour, -1, (0, 255, 0), 2)
+
+    cv2.imshow('Hasil',color)
+
+    print("banyak coin adalah ", len(contour))
+
+    if cv2.waitKey(1) == ord("q"):
+        break 
+```
+ Coba Jalankan maka di console atau terminal akan mencul tulisan seperti ini
+
+```console
+banyak coin adalah 3
+banyak coin adalah 3
+banyak coin adalah 3
+banyak coin adalah 3
+```
+dan memunculkan gambar coin dengan garis tepi hijau seperti dibawah ini
+
+![Coin detector](https://i.ibb.co/3B3xgLn/Selection-027.png)
+
+Penjelasan dari masing-masing code adalah sebagai berikut ini
+
+```python
+# buat trackbar
+def empty(a):
+    pass
+
+cv2.namedWindow("parameter")
+cv2.resizeWindow("parameter",640,240)
+cv2.createTrackbar("threshold1","parameter",0,500,empty)
+cv2.createTrackbar("threshold2","parameter",255,500,empty)
+```
+
+Code diatas digunakan untuk membuat trackball yang digunakan sebagai parameter untuk mencari garis tepi dari objek. Disini saya gunakan 2 parameter yaitu threshold1 dan threshhold2.
+
+Disini saya gunakan fungsi untuk camera agar setiap perubahan yang kita lakukan pada trackbar akan dijalankan secara real time dan kita load gambar coin.
+
+```python
+while True:
+    ret, frame=cam.read()
+
+    #load gambar
+    image = cv2.imread("resources/coin1.jpg")
+```
+Selanjutnya kita resize ukurannya, serta di konversi ke abu-abu dan diberikan filter gaussian blur.
+
+```python
+img = imutils.resize(img, width=300)
+
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+blur = cv2.GaussianBlur(gray, (5,5), 0)
+```
+
+
+
 
 
 ## Referensi

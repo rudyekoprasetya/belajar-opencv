@@ -12,7 +12,7 @@ def empty(a):
 
 cv2.namedWindow("parameter")
 cv2.resizeWindow("parameter",640,240)
-cv2.createTrackbar("threshold1","parameter",150,500,empty)
+cv2.createTrackbar("threshold1","parameter",0,500,empty)
 cv2.createTrackbar("threshold2","parameter",255,500,empty)
 
 while True:
@@ -20,7 +20,7 @@ while True:
 
     img = cv2.imread('resources/coin1.jpg')
 
-    img = imutils.resize(img, width=600)
+    img = imutils.resize(img, width=300)
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
